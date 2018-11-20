@@ -111,7 +111,8 @@ class tmsf(scrapy.Spider):
         for sel in response.css('div.houseBox2'):
             item = DmozItem()
             item['title'] = sel.css('div.house_listinfo h5 a::attr(title)').extract()
-            item['price'] = sel.css('div.house_price_unit::text').extract()
+            item['price'] = sel.css('div.house_price_total strong::text').extract()
+            item['price'] = [int(i) for i in item['price']]
             item['info'] = sel.css('div.house_listinfo_line span::text').extract()
             item['info'] = list(filter(self.is_spachial, item['info']))
             item['area'] = sel.css('div.house_listinfo_line span a::text').extract()
@@ -155,6 +156,7 @@ class ke(scrapy.Spider):
             item = DmozItem()
             item['title1'] = sel.xpath('div[1]/a/text()').extract()
             item['price1'] = sel.xpath('div[6]/div[1]/span/text()').extract()
+            item['price1'] = [int(i) for i in item['price1']]
             item['info1'] = sel.xpath('div[2]/div[1]/text()').extract()
             info1_after = []
             for x in item['info1']:
